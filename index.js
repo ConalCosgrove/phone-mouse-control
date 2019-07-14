@@ -27,13 +27,11 @@ io.on('connection', (socket) => {
     pos.y = startY + (y * height);
   });
   socket.on('click', () => {
-    console.log('click')
     clicked = true;
     robot.mouseToggle('down','left');
   });
 
   socket.on('unclick', () => {
-    console.log('unclick');
     clicked = false;
     robot.mouseToggle('up', 'left');
   });
@@ -41,7 +39,6 @@ io.on('connection', (socket) => {
   socket.on('scroll', (distance) => {
     robot.scrollMouse(0, distance * scrollCoefficient);
   });
-
 });
 
 setInterval(() => {
@@ -54,11 +51,10 @@ setInterval(() => {
     
     last.x = pos.x;
     last.y = pos.y;
-  } else {
-
   }
   
 }, 25);
+
 app.use(express.static('static'))
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
