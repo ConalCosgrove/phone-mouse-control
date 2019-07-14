@@ -1,8 +1,11 @@
 const express = require('express');
 const robot = require('robotjs');
 const app = express();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+const { getIpAddress } = require('./getIp');
+const port = 8080;
+const ip = getIpAddress();
 const screenSize = robot.getScreenSize();
 const { width, height } = screenSize;
 const scrollCoefficient = 200;
@@ -11,6 +14,7 @@ let pos = robot.getMousePos();
 let last = {x: 0, y: 0};
 let clicked = false;
 const debouncing = 5;
+
 io.on('connection', (socket) => {
   socket.emit('dimensions',robot.getScreenSize());
   socket.on('startMove', () => {
@@ -56,10 +60,10 @@ setInterval(() => {
   
 }, 25);
 app.use(express.static('static'))
-app.get('/click', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 })
 
 http.listen(8080, '0.0.0.0', () => {
-  console.log('Listening on 0.0.0.0:8080');
+  console.log(`Listening on ${ip}:${port}`);
 });
